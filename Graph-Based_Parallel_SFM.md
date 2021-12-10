@@ -44,11 +44,11 @@
 1. Divide and conquer: Efficient large-scale structure from motion using graph partitioning [2016]
 2. Shapefit and shapekick for robust, scalable structure from motion [2014]
 3. Large scale sfm with the distributed camera model [2016]
-4. Robust global translations with 1dsfm [2014]
+4. Robust global translations with 1dsfm [2014] D
 5. Distributed very large scale bundle adjustment by global camera consensus [2017]
 6. Parallel structure from motion from local increment to global averaging [2017]
-7. Very large-scale global sfm by distributed motion averaging [2018]
-8.  Baseline desensitizing in translation averaging [2018]
+7. Very large-scale global sfm by distributed motion averaging [2018] D
+8.  Baseline desensitizing in translation averaging [2018] D
 
 我很伤心，这些论文竟然没有一篇有代码，但是至少陈煜的论文有代码……
 
