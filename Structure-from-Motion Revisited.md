@@ -188,29 +188,25 @@
 
     ![image-20211221205351946](img/image-20211221205351946.png)
 
-    
+  - Robust and Efficient Triangulation
 
-  
+    ![image-20211222180838178](img/image-20211222180838178.png)
 
-  
+    目前对各个算法的三角化实现不是太清楚，从表格数据上看，colmap和VSFM表现相近，甚至VSFM的数据更好，但是VSFM的注册图像数量不如colmap；
 
-  
+    ![image-20211222181259876](img/image-20211222181259876.png)
 
-  
+    基于ransac的方法，和详尽采样的方法相比，track略短，但是速度会快很多（10-40倍），而且可以通过调节参数，来平衡运行速度和完整性。
 
-  
+  - Redundant View Mining
 
-  
+    :triangular_flag_on_post: 对原理不太明白，所以对实验也不是很明白，需要迭代；
 
-  
+  - System
 
-  
+    Theia is the fastest method, while our method achieves slightly worse timings than VisualSFM and is more than 50 times faster than Bundler.
 
-  
-
-  
-
-  
+    For all datasets, we significantly outperform any other method in terms of completeness, especially for the larger models. Importantly, the increased track lengths result in higher redundancy in BA.
 
 **3rd pass (4-5 hours)**
 
