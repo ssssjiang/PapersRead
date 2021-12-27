@@ -67,11 +67,52 @@
     - 资源敏感：SLAM系统可以根据资源和传感器裁剪，并根据现有资源调整计算负载；
     - 判断驱动任务：根据支持的任务选择相关的感知信息、过滤不相关的传感器数据，根据任务调整地图表示的复杂度；
 
-  > 作者建议先看SLAM 12，那就先看吧。
+  > 作者建议先看SLAM 12，那就先看吧。`回来了，弃了12`
 
 - SLAM的标准框架：
 
-  - 包括两个主要组件：前端和后端， 前端将传感器数据抽象成适合估计的模型，而后端则对前端产生的抽象数据进行推理；
+  包括两个主要组件：前端和后端， 前端将传感器数据抽象成适合估计的模型，而后端则对前端产生的抽象数据进行推理；
+  
+  - 最大后验估计和SLAM后端：
+  
+    - 问题建模：
+  
+      - 观测方程：$z_{k}=h_{k}\left(\mathcal{X}_{k}\right)+\epsilon_{k}$
+      - 目标方程：$\mathcal{X}^{\star} \doteq \underset{\mathcal{X}}{\operatorname{argmax}} \mathrm{p}(\mathcal{X} \mid Z)=\underset{\mathcal{X}}{\operatorname{argmax}} \mathrm{p}(Z \mid \mathcal{X}) \mathrm{p}(\mathcal{X})$
+  
+      注：在不知道先验时，先验是一个常量，也就是均匀分布；
+  
+      - 和卡尔曼滤波不同的是，MAP估计不要求明确的区分运动方程和观测方程；
+      - 如果观测是独立的，目标方程可以分解为：$\begin{aligned} \mathcal{X}^{\star} &=\underset{\mathcal{X}}{\operatorname{argmax}} \mathrm{p}(\mathcal{X}) \prod_{k=1}^{m} \mathrm{p}\left(z_{k} \mid \mathcal{X}\right) \\ &=\underset{\mathcal{X}}{\operatorname{argmax}} \mathrm{p}(\mathcal{X}) \prod_{k=1}^{m} \mathrm{p}\left(z_{k} \mid \mathcal{X}_{k}\right) \end{aligned}$
+      - 因子图表示：
+  
+      ![image-20211227202834720](img/image-20211227202834720.png)
+  
+      - 目标方程代入观测方程，假设噪声是高斯白噪声：
+  
+        $\mathrm{p}\left(z_{k} \mid \mathcal{X}_{k}\right) \propto \exp \left(-\frac{1}{2}\left\|h_{k}\left(\mathcal{X}_{k}\right)-z_{k}\right\|_{\Omega_{k}}^{2}\right)$
+  
+        先验：$\mathrm{p}(\mathcal{X}) \propto \exp \left(-\frac{1}{2}\left\|h_{0}(\mathcal{X})-z_{0}\right\|_{\Omega_{0}}^{2}\right)$
+  
+      - 最大后验转最小化负对数：
+  
+        $\begin{aligned} \mathcal{X}^{\star} &=\underset{\mathcal{X}}{\operatorname{argmin}}-\log \left(\mathrm{p}(\mathcal{X}) \prod_{k=1}^{m} \mathrm{p}\left(z_{k} \mid \mathcal{X}_{k}\right)\right) \\ &=\underset{\mathcal{X}}{\operatorname{argmin}} \sum_{k=0}^{m}\left\|h_{k}\left(\mathcal{X}_{k}\right)-z_{k}\right\|_{\Omega_{k}}^{2} \end{aligned}$
+  
+        转化成了非线性最小二乘问题，目前这个结果由对噪声的假设是高斯白噪声导出的，如果对噪声有别的假设，那成本函数的形式就不同了；
+  
+        - 如噪声服从拉普拉斯分布，那squared l2 -norm变l1 -norm；
+        - 为了增加对外点的容忍度，也会把squared l2 -norm替换为更鲁棒的loss function，如Huber或Tukey等；
+  
+    - CV这边类似的问题是SFM里的BA问题，但是有两个关键区别：
+  
+      - SLAM这边因子不仅是对射影几何建模，还包括多种传感器；
+      - SLAM这边更要求增量式的解；
+  
+    - 非线性优化：
+  
+    - 
+  
+      
 
 **3rd pass (4-5 hours)**
 
@@ -97,4 +138,6 @@
 
 - [Visual place recognition: A survey](https://eprints.qut.edu.au/222264/1/visual_place_recognition_a_survey_revised_final.pdf)
 - [Simultaneous Localisation and Mapping (SLAM): Part II State of the Art](http://robotics.caltech.edu/~jwb/courses/ME132/final/slamtute2.pdf)
-- [Simultaneous Localization and Mapping: Part I](http://everobotics.org/pdf/SLAMTutorial.pdf)
+- [Simultaneous Localization and Mapping: Part I](http://everobotics.org/pdf/SLAMTutorial.pdf) `弃了`
+
+[143] F. R. Kschischang, B. J. Frey, and H. A. Loeliger, “Factor graphs and the sum-product algorithm,” IEEE Trans. Infor. Theory, vol. 47, no. 2, pp. 498–519, Feb. 2001.
