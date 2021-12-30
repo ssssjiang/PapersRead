@@ -53,6 +53,8 @@
 
     -- 当外点率超过阈值时，就判定为错误的匹配对；
 
+    `对极误差：`$\sum_{i} \frac{\left(\mathbf{x}_{i}^{\prime \top} \mathrm{F} \mathbf{x}_{i}\right)^{2}}{\left(\mathrm{~F} \mathbf{x}_{i}\right)_{1}^{2}+\left(\mathrm{F} \mathbf{x}_{i}\right)_{2}^{2}+\left(\mathrm{F}^{\top} \mathbf{x}_{i}^{\prime}\right)_{1}^{2}+\left(\mathrm{F}^{\top} \mathbf{x}_{i}^{\prime}\right)_{2}^{2}}$
+  
   - 在过滤错误的匹配对，和错误的匹配对之后，会对图像对重新ransac估计图像之间的变换；
 
 **思考**
