@@ -58,6 +58,19 @@ pixloc需要查询帧的先验位置（使用参考帧的位姿 / GPS），还�
 
 - PixLoc: from pixels to pose：PixLoc localizes by aligning query and reference images according to the known 3D structure of the scene.
 
+  -  Localization as image alignment
+
+    ![image-20220106163417469](img/image-20220106163417469.png)
+
+    我目前的理解是：pixloc的模型还是只负责提取可靠的特征描述，并且给特征计算了权重，给出初始pose + 参考帧后，参考帧对应的3D点可以投影到图像上，对应某个像素，利用像素对应的特征，构建残差项：$\mathbf{r}_{k}^{i}=\mathbf{F}_{q}^{l}\left[\mathbf{p}_{q}^{i}\right]-\mathbf{F}_{k}^{l}\left[\mathbf{p}_{k}^{i}\right] \in \mathbb{R}^{D}$，$\mathbf{p}_{q}^{i}=\Pi\left(\mathbf{R} \mathbf{P}_{i}+\mathbf{t}\right)$，然后通过LM算法迭代的优化出pose；
+
+    > 问题：
+    >
+    > 1. LM算法这个环节怎么参与误差传递；
+    > 2. 找到的参考帧一定是正确的吗？如果是错误的图像匹配对，计算的结果是什么样的？有能力拒绝这种错误的图像匹配对吗？
+    > 3. 方案的pose精度和准确率怎么样？
+
+    如果以上的理解是对的，就可以解释它为什么可以接在其他匹配算法后面细化位姿；
 
 
 **3rd pass (4-5 hours)**
