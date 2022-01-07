@@ -6,7 +6,7 @@
 
 隔一段时间就去看看别人的issue，说不定有我需要的。
 
-[Question about superPoint keypoint count for Indoor/Outdoor image sets #3](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/3)
+
 
 [About Sinkhorn algorithm use #4](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/4)
 
@@ -16,23 +16,21 @@
 
 [Question regarding recoverPose #19](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/19)
 
-:star: [Question about optimal transport training #24](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/24)
-
-:star: :star:[Details for reproducing the indoor pose estimation experiment #31](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/31)
-
-[I wonder how to perform the homography pretraining? Can it be a perspective transformation? #92](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/92)
 
 
 
-[Adding random keypoints during training #90](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/90)
 
--- 提问的人在训练期间通过添加随机superpoint点来构建batch，提问了在ScanNet上的`训练细节`。
+[I wonder how to perform the homography pretraining? Can it be a perspective transformation? #92](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/92) 生成单应性训练数据
+
+
+
+
 
 [is there some thing with your code ”compute_epipolar_error“? #84](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/84)
 
 [Overfitting during training on MegaDepth #81](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/81)
 
-[Question about training with Oxford and Paris dataset #79](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/79)
+
 
 [The usage of 'bin_score' and 'match_threshold'? #78](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/78)
 
@@ -40,19 +38,17 @@
 
 [How is the camera Intrinsic matrix in the yfcc_test_pairs_with_gt.txtfile obtained? #55](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/55)
 
-:star: [Details for training on Megadepth #54](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/54)
 
-:star: [关于原始论文中亚琛数据集结果的问题。 #52](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/52)
 
 **！！！大惊喜！！D2Net提供训练的pipeline好家伙！！**
 
-[About the pose of ScanNet #41](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/41)  using SUN3D dataset(preprocessed by OANet) and Megadepth(preprocessed by D2Net)
+
 
 :star: [Have you compared your method with graph-match method? #38](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/38) 其他的图匹配算法
 
 [Question about phototourism test pairs #27](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/27)
 
-[Some details about homography trained models #16](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/16)
+[Some details about homography trained models #16](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/16)其实是在HPatch上评价时的细节；
 
 
 
@@ -112,11 +108,28 @@
 
   作者回复关于重定位测试，在[比赛网站](https://www.visuallocalization.net/)上，他们还给出了针对每个数据集的更多细节。
 
----------------------
 
 - :star:[SuperPoint model sample descriptor #18](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/18)
 
-  关于训练期间对superpoint插值。
+  关于训练期间对superpoint插值;
+  
+- [Question about superPoint keypoint count for Indoor/Outdoor image sets #3](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/3)
+
+- :star: [Question about optimal transport training #24](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/24)
+
+- :star: :star:[Details for reproducing the indoor pose estimation experiment #31](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/31)
+
+- [Adding random keypoints during training #90](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/90)
+
+  -- 提问的人在训练期间通过添加随机superpoint点来构建batch，提问了在ScanNet上的`训练细节`；
+
+- [Question about training with Oxford and Paris dataset #79](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/79)
+
+- :star: [关于原始论文中亚琛数据集结果的问题。 #52](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/52)
+
+- [About the pose of ScanNet #41](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/41)  using SUN3D dataset(preprocessed by OANet) and Megadepth(preprocessed by D2Net)
+
+- :star: [Details for training on Megadepth #54](https://github.com/magicleap/SuperGluePretrainedNetwork/issues/54)
 
 ## 多平台部署
 
