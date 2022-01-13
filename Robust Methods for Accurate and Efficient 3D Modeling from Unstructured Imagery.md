@@ -179,7 +179,7 @@
 
         > 还要注意，如果相机沿光轴运动，或相机仅旋转不平移，三角化是退化的，因为光轴所有的点都是满足条件的；
 
-    -  Two-View Geometry
+    - Two-View Geometry
 
       它可以用来描述经历不同类型运动的相机的两个视图之间的几何关系，而无需显式恢复场景的欧几里得结构；
 
@@ -201,12 +201,139 @@
 
         其中N是Scene Plane的单位法向量，d是场景平面到第一个摄像机的投影中心的正交距离；
 
+        > 如果相机运动是纯旋转或者scence plane太远，单应矩阵就会退化成$\boldsymbol{H}=\boldsymbol{K}_{2} \boldsymbol{R}_{2} \boldsymbol{K}_{1}^{-1}$
+        >
+        > `注：`待会儿注意一下仿射变换、相似变换等的变换关系；
         
-
+      - 基础矩阵
     
-
+        - 图像2上的极线由：$\mathbf{l}^{\prime}=\left(\mathrm{P}^{\prime} \mathbf{C}\right) \times\left(\mathrm{P}^{\prime} \mathrm{P}^{+} \mathbf{x}\right)$计算；
+    
+          > 两点叉乘得过两点的线；
+          >
+          > $\mathrm{P}^{\prime} \mathbf{C}$代表C在图像2上的投影，也就是图像2上的极点；
+    
+        - 通过基础矩阵将图像1上的点投影成图像2 中的线（极线），$\mathbf{l}^{\prime}=\left[\mathbf{e}^{\prime}\right]_{\times}\left(\mathrm{P}^{\prime} \mathrm{P}^{+}\right) \mathbf{x}=\mathrm{Fx}$
+    
+          $\mathrm{F}=\left[\mathrm{e}^{\prime}\right]_{\times} \mathrm{P}^{\prime} \mathrm{P}^{+}$
+    
+        - 可以对基础矩阵做进一步整理：
+    
+          $\mathrm{P}=\mathrm{K}[\mathrm{I} \mid \mathbf{0}] \quad \mathrm{P}^{\prime}=\mathrm{K}^{\prime}[\mathrm{R} \mid \mathbf{t}]$
+    
+          $\mathrm{P}^{+}=\left[\begin{array}{c}\mathrm{K}^{-1} \\ \mathbf{0}^{\top}\end{array}\right] \quad \mathrm{C}=\left(\begin{array}{c}\mathbf{0} \\ 1\end{array}\right)$
+    
+          > $\mathbf{X}(\lambda)=\mathrm{P}^{+} \mathbf{x}+\lambda \mathbf{C}$ 2D 点投影回去是一条线；
+    
+          $\begin{aligned} \mathrm{F} &=\left[\mathrm{P}^{\prime} \mathbf{C}\right]_{\times} \mathrm{P}^{\prime} \mathrm{P}^{+} \\ &=\left[\mathrm{K}^{\prime} \mathbf{t}\right]_{\times} \mathrm{K}^{\prime} \mathrm{RK}^{-1}=\mathrm{K}^{\prime-\mathrm{T}}[\mathbf{t}]_{\times} \mathrm{RK}^{-1}=\mathrm{K}^{\prime-\mathrm{T}} \mathrm{R}\left[\mathrm{R}^{\top} \mathbf{t}\right]_{\times} \mathrm{K}^{-1}=\mathrm{K}^{\prime-\mathrm{T}} \mathrm{RK}^{\top}\left[\mathrm{KR}^{\top} \mathbf{t}\right]_{\times} \end{aligned}$
+    
+          $\mathbf{e}=\mathrm{P}\left(\begin{array}{c}-\mathrm{R}^{\top} \mathbf{t} \\ 1\end{array}\right)=\mathrm{KR}^{\top} \mathbf{t} \quad \mathbf{e}^{\prime}=\mathrm{P}^{\prime}\left(\begin{array}{c}\mathbf{0} \\ 1\end{array}\right)=\mathrm{K}^{\prime} \mathbf{t}$
+    
+          $\mathrm{F}=\left[\mathbf{e}^{\prime}\right]_{\times} \mathrm{K}^{\prime} \mathrm{RK}^{-1}=\mathrm{K}^{\prime-\mathrm{T}}[\mathbf{t}]_{\times} \mathrm{RK}^{-1}=\mathrm{K}^{\prime-\mathrm{T}} \mathrm{R}\left[\mathrm{R}^{\top} \mathbf{t}\right]_{\times K} \mathrm{~K}^{-1}=\mathrm{K}^{\prime-\mathrm{T}} \mathrm{RK}^{\top}[\mathbf{e}]_{\times}$
+    
+          > 这部分推导还不是很熟悉；
+    
+           基础矩阵是8个自由度，但是本质矩阵仅5个自由度，位姿-尺度 = 6 - 1 = 5；
+    
+          > - 一对点提供一个自由度的约束，所以需要有8对点；
+          >
+          > - 本质矩阵用5点法求解，会得到4组解，但是只有一个解在几何上是合理的，也就是点在摄像机前；
+    
+          `注：`需要再仔细看一下基础矩阵的线性求解和约束，还有单应矩阵的线性求解方案和约束；`中午看`
+    
+    - Non-Linear Estimation
+    
+      因为数据中含有噪声，所以充分的利用测量数据的冗余和正确地对噪声建模，是至关重要的；
+    
+      - 最大似然估计：
+    
+        $\boldsymbol{x} \sim \mathcal{N}\left(\mathbf{0}, \boldsymbol{\sigma}_{\boldsymbol{x}}^{2}\right)$
+    
+        $\boldsymbol{X}^{*}, \boldsymbol{P}^{*}=\underset{\boldsymbol{X}, \boldsymbol{P}}{\arg \min }\left\|\boldsymbol{x}-\frac{1}{\lambda} \boldsymbol{P} \boldsymbol{X}\right\|=\underset{\boldsymbol{X}, \boldsymbol{P}}{\arg \min }\left\|\boldsymbol{e}_{\boldsymbol{x}}\right\|$
+    
+        > 在归一化相机平面上计算error；
+    
+        BA需要有一个合适的初始化，常见的做法是用双视图几何和三角化恢复运动和结构，最后再用BA来细化；
+    
+      - 针对不同的问题，提出了不同的cost函数：
+    
+        - Camera Calibration and Triangulation
+    
+          > 前面直接线性变换最小化的是代数误差，缺乏统计和几何验证；
+    
+          最大似然估计：
+    
+          $\boldsymbol{P}^{*}=\underset{\boldsymbol{P}}{\arg \min }\left\|\boldsymbol{x}-\frac{1}{\lambda} \boldsymbol{P} \boldsymbol{X}\right\|$
+          $\boldsymbol{X}^{*}=\underset{\boldsymbol{X}}{\arg \min }\left\|x-\frac{1}{\lambda} \boldsymbol{P} \boldsymbol{X}\right\|$
+    
+          非线性优化总是需要一个较好的初始值，避免陷入到局部最优，可以使用前面的直接线性变换计算结果作为初始值；
+    
+        - 7.4 Robust and Efficient Triangulation
+    
+          feature track的过程中噪声非常的多：错误的track、不准确的camera pose；
+    
+          因此考虑采用ransac的方案，找到consensus set，这个方案有助于拒绝噪声，也有助于在错误的merge中恢复track；
+    
+        - Two-View Geometry
+    
+          针对单应的几何cost函数：
+    
+          $\boldsymbol{H}^{*}=\underset{\boldsymbol{H}}{\arg \min }\left\|\boldsymbol{x}_{2}-\frac{1}{\lambda_{2}} \boldsymbol{H} \boldsymbol{x}_{1}\right\|+\left\|\boldsymbol{x}_{1}-\frac{1}{\lambda_{1}} \boldsymbol{H}^{-1} \boldsymbol{x}_{2}\right\|$ `估计H`
+    
+          $\boldsymbol{H}^{*}, \hat{\boldsymbol{x}}_{1}^{*}, \hat{\boldsymbol{x}}_{2}^{*}=\underset{\boldsymbol{H}, \hat{\boldsymbol{x}}_{1}, \hat{\boldsymbol{x}}_{2}}{\arg \min }\left\|\boldsymbol{x}_{1}-\hat{\boldsymbol{x}}_{1}\right\|+\left\|\boldsymbol{x}_{2}-\hat{\boldsymbol{x}}_{2}\right\| \quad$ subject to $\quad \hat{\boldsymbol{x}}_{2}=\boldsymbol{H} \hat{\boldsymbol{x}}_{1}$`同时估计H和x1, x2`
+    
+          针对对极几何的cost函数：
+    
+          最小化点到基线的正交距离：$\boldsymbol{F}^{*}=\underset{\boldsymbol{F}}{\arg \min } d\left(\boldsymbol{x}_{2}, \boldsymbol{F} \boldsymbol{x}_{1}\right)^{2}+d\left(\boldsymbol{x}_{1}, \boldsymbol{F}^{T} \boldsymbol{x}_{2}\right)^{2} .$；
+    
+          在点的噪声建模为高斯分布的情况下：$\boldsymbol{F}^{*}=\underset{\boldsymbol{F}}{\arg \min }\left\|\boldsymbol{x}_{1}-\hat{\boldsymbol{x}}_{1}\right\|+\left\|\boldsymbol{x}_{2}-\hat{\boldsymbol{x}}_{2}\right\| \quad$ subject to $\quad \hat{\boldsymbol{x}}_{2}^{T} \boldsymbol{F} \hat{\boldsymbol{x}}_{1}=\mathbf{0}$
+    
+          但是MVG中讨论过，最优的cost函数是：$\boldsymbol{F}^{*}=\underset{\boldsymbol{F}}{\arg \min } \frac{\boldsymbol{x}_{2}^{T} \boldsymbol{F} \boldsymbol{x}_{1}}{\left(\boldsymbol{F} \boldsymbol{x}_{1}\right)_{1}^{2}+\left(\boldsymbol{F} \boldsymbol{x}_{1}\right)^{2}+\left(\boldsymbol{F}^{T} \boldsymbol{x}_{2}\right)_{1}^{2}+\left(\boldsymbol{F}^{T} \boldsymbol{x}_{2}\right)^{2}}$
+    
+        - Optimization Algorithms
+    
+          There are several approaches to minimize a non-linear cost function $f: \mathbb{R}^{m} \rightarrow \mathbb{R}^{n}$over some variables $\boldsymbol{\theta} \in \mathbb{R}^{m}$ m in the least-squares sense, i.e.
+    
+          $\boldsymbol{\theta}^{*}=\underset{\boldsymbol{\th\boldsymbol{J}_{i j}=\delta_{j} \boldsymbol{f}_{i}(\boldsymbol{\theta})eta}}{\arg \min } \frac{1}{2}\|\boldsymbol{f}(\boldsymbol{\theta})\|^{2}$
+    
+          在工作点局部线性化：$g(\boldsymbol{\theta})=\nabla \frac{1}{2}\|f(\boldsymbol{\theta})\|^{2}=\boldsymbol{J}^{T} \boldsymbol{f}(\boldsymbol{\theta})$，$\boldsymbol{J}_{i j}=\delta_{j} \boldsymbol{f}_{i}(\boldsymbol{\theta})$
+    
+          再具体一点：
+    
+          - 最小化一阶线性化：$\boldsymbol{f}(\boldsymbol{\theta}+\Delta \boldsymbol{\theta}) \approx \boldsymbol{f}(\boldsymbol{\theta})+\boldsymbol{J}(\boldsymbol{\theta}) \Delta \boldsymbol{\theta}$
+    
+          - cost函数变为：$\Delta \boldsymbol{\theta}^{*}=\underset{\Delta \boldsymbol{\theta}}{\arg \min } \frac{1}{2}\|\boldsymbol{f}(\boldsymbol{\theta})+\boldsymbol{J}(\boldsymbol{\theta}) \Delta \boldsymbol{\theta}\|^{2}$
+    
+          - 更新规则：$\boldsymbol{\theta}_{t+1}^{*}=\boldsymbol{\theta}_{t}^{*}+\Delta \boldsymbol{\theta}_{t}^{*}$
+    
+            > 为了收敛的更好，有增加置信阈、自适应线性搜索等策略；
+    
+            如：LM（置信阈方法），它其实可以分为直接梯度下降和高斯牛顿两个部分：
+    
+            - 高斯牛顿：$\boldsymbol{J}(\boldsymbol{\theta})^{T} \boldsymbol{J}(\boldsymbol{\theta}) \Delta \boldsymbol{\theta}=-\boldsymbol{J}(\boldsymbol{\theta})^{T} \boldsymbol{f}(\boldsymbol{\theta})$；
+    
+            - LM算法：$\left(\boldsymbol{J}(\boldsymbol{\theta})^{T} \boldsymbol{J}(\boldsymbol{\theta})+\lambda \boldsymbol{D}(\boldsymbol{\theta})\right) \Delta \boldsymbol{\theta}=-\boldsymbol{J}(\boldsymbol{\theta})^{T} \boldsymbol{f}(\boldsymbol{\theta})$
+    
+              $\boldsymbol{D}(\boldsymbol{\theta})=\operatorname{diag}\left(\boldsymbol{J}(\boldsymbol{\theta})^{T} \boldsymbol{J}(\boldsymbol{\theta})\right)$
+    
+              > `证明MVG上的说明`
+    
+            
+    
+          
+    
+        
+    
+      
+    
+      
+    
+      
+    
+    
   
-
+  
+  
   
 
 **3rd pass (4-5 hours)**
