@@ -45,8 +45,7 @@
       - Classification loss
       - Geometric loss
 
-
-    - Implementation Details
+- Implementation Details
 
   - Evaluation on Geometrical Tasks
 
