@@ -116,7 +116,21 @@ $$
 
 - The matrix $e^{[\mathbf{t}]_{\times}}$ is a rotation matrix representing a rotation through an angle  t about the axis represented by the vector t.
 
-- $[\mathbf{t}]_{x}^{2}=\mathbf{t} \mathbf{t}^{\top}-\|\mathbf{t}\|^{2} \mathrm{I}$
+- $[\mathbf{t}]_{×}^{2}=\mathbf{t} \mathbf{t}^{\top}-\|\mathbf{t}\|^{2} \mathrm{I}$
+
+  $\begin{aligned}
+  e^{[\mathbf{t}]_{\times}} &=I+[\mathbf{t}]_{\times}+[\mathbf{t}]_{\times}^{2} / 2 !+[\mathbf{t}]_{\times}^{3} / 3 !+[\mathbf{t}]_{\times}^{4} / 4 !+\ldots \\
+  &=I+\|\mathbf{t}\|[\hat{\mathbf{t}}]_{\times}+\|\mathbf{t}\|^{2}[\hat{\mathbf{t}}]_{\times}^{2} / 2 !-\|\mathbf{t}\|^{3}[\hat{\mathbf{t}}]_{\times} / 3 !-\|\mathbf{t}\|^{4}[\hat{\mathbf{t}}]_{\times}^{2} / 4 !+\ldots \\
+  &=I+\sin \|\mathbf{t}\|[\hat{\mathbf{t}}]_{\times}+(1-\cos \|\mathbf{t}\|)[\hat{\mathbf{t}}]_{\times}^{2} \\
+  &=I+\operatorname{sinc}\|\mathbf{t}\|[\mathbf{t}]_{\times}+\frac{1-\cos \|\mathbf{t}\|}{\|\mathbf{t}\|^{2}}[\mathbf{t}]_{\times}^{2} \\
+  &=\cos \|\mathbf{t}\| \mathrm{I}+\operatorname{sinc}\|\mathbf{t}\|[\mathbf{t}]_{\times}+\frac{1-\cos \|\mathbf{t}\|}{\|\mathbf{t}\|^{2}} \mathbf{t t}^{\top}
+  \end{aligned}$
+
+  > 如果轴和角分离，||t|| = 角度，t仅表示方向，模长为1，上面的式子会简化很多；
+
+  $\eta=\cos \frac{\phi}{2}, \quad \varepsilon=\mathbf{a} \sin \frac{\phi}{2}=\left[\begin{array}{l}a_{1} \sin (\phi / 2) \\ a_{2} \sin (\phi / 2) \\ a_{3} \sin (\phi / 2)\end{array}\right]=\left[\begin{array}{l}\varepsilon_{1} \\ \varepsilon_{2} \\ \varepsilon_{3}\end{array}\right]$
+
+  再加上上面的式子，轴角表达 & 李代数 & 旋转矩阵，就关联了起来；
 
 - 从旋转矩阵提取轴角：
 
